@@ -45,7 +45,6 @@ public:
 
 	void initializePrevPos()
 	{
-		// std::copy(pos.begin(), pos.end(), prevPos.begin());
 		prevPos = pos;
 	}
 
@@ -53,6 +52,11 @@ public:
 	{
 		for(unsigned i = 0; i < quantity; ++i)
 			vel.push_back(commonVel);
+	}
+
+	void initializePrevVel()
+	{
+		prevVel = vel;
 	}
 
 	unsigned systemSize() const
@@ -75,10 +79,10 @@ public:
 		return vel;
 	}
 
-	// vector& getPrevVel()
-	// {
-	// 	return prevVel;
-	// }
+	vector& getPrevVel()
+	{
+		return prevVel;
+	}
 
 
 private:
@@ -90,6 +94,6 @@ private:
 	vector pos;
 	vector prevPos;
 	vector vel;
-	// vector prevVel;
+	vector prevVel;
 	//vector color;
 };
