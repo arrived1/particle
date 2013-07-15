@@ -27,6 +27,42 @@ public:
 		quantity(xSize * ySize * zSize)
 	{}
 
+	void initialize(float3 commonVel)
+	{
+		initializePos();
+		initializePrevPos();
+		initializeVel(commonVel);
+		initializePrevVel();
+	}
+	
+
+	unsigned systemSize() const
+	{
+		return quantity;
+	}
+
+	vector& getPos()
+	{
+		return pos;
+	}
+
+	vector& getPrevPos()
+	{
+		return prevPos;
+	}
+
+	vector& getVel()
+	{
+		return vel;
+	}
+
+	vector& getPrevVel()
+	{
+		return prevVel;
+	}
+
+
+private:
 	void initializePos()
 	{
 		float xRange = xSize;
@@ -59,33 +95,7 @@ public:
 		prevVel = vel;
 	}
 
-	unsigned systemSize() const
-	{
-		return quantity;
-	}
 
-	vector& getPos()
-	{
-		return pos;
-	}
-
-	vector& getPrevPos()
-	{
-		return prevPos;
-	}
-
-	vector& getVel()
-	{
-		return vel;
-	}
-
-	vector& getPrevVel()
-	{
-		return prevVel;
-	}
-
-
-private:
 	const unsigned xSize;
 	const unsigned ySize;
 	const unsigned zSize;

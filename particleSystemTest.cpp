@@ -11,10 +11,12 @@ public:
 		x = 2;
 		y = 6;
 		z = 6;
+		commonVel.reset(new float3(3.f, 0, 0));
 		system.reset(new ParticleSystem(x, y, z));
 	}
 
 	unsigned x, y, z;
+	boost::shared_ptr<float3> commonVel;
 	boost::shared_ptr<ParticleSystem> system;
 };
 
@@ -28,7 +30,8 @@ TEST_F(ParticleSystemTest, test_setSystemSize)
 
 TEST_F(ParticleSystemTest, test_initializePos)
 {
-    system->initializePos();
+    // system->initializePos();
+    system->initialize(*commonVel);
 
     ASSERT_EQ(2 * 6 * 6, system->getPos().size());
     
@@ -43,8 +46,9 @@ TEST_F(ParticleSystemTest, test_initializePos)
 
 TEST_F(ParticleSystemTest, test_initializePrevPos)
 {
-    system->initializePos();
-    system->initializePrevPos();
+	system->initialize(*commonVel);
+    // system->initializePos();
+    // system->initializePrevPos();
 
     ASSERT_EQ(system->getPos().size(), system->getPrevPos().size());
 
@@ -58,8 +62,9 @@ TEST_F(ParticleSystemTest, test_initializePrevPos)
 
 TEST_F(ParticleSystemTest, test_changedValueOfPos)
 {
-    system->initializePos();
-    system->initializePrevPos();
+	system->initialize(*commonVel);
+    // system->initializePos();
+    // system->initializePrevPos();
 
     float3 newPos(10.f, 10.f, 10.f);
     system->getPos()[0] = newPos;
@@ -71,22 +76,22 @@ TEST_F(ParticleSystemTest, test_changedValueOfPos)
 
 TEST_F(ParticleSystemTest, test_initializeVel)
 {
-	float3 basicVel(3.f, 0, 0);
-	system->initializeVel(basicVel);
+	system->initialize(*commonVel);
+	// system->initializeVel(*commonVel);
 
 	for(unsigned i = 0; i < system->systemSize(); ++i)
 	{
-		ASSERT_EQ(basicVel.x, system->getVel()[i].x);
-		ASSERT_EQ(basicVel.y, system->getVel()[i].y);
-		ASSERT_EQ(basicVel.z, system->getVel()[i].z);
+		ASSERT_EQ(commonVel->x, system->getVel()[i].x);
+		ASSERT_EQ(commonVel->y, system->getVel()[i].y);
+		ASSERT_EQ(commonVel->z, system->getVel()[i].z);
 	}
 }
 
 TEST_F(ParticleSystemTest, test_initializePrevVel)
 {
-	float3 basicVel(3.f, 0, 0);
-	system->initializeVel(basicVel);
-	system->initializePrevVel();
+	system->initialize(*commonVel);
+	// system->initializeVel(*commonVel);
+	// system->initializePrevVel();
 
 	for(unsigned i = 0; i < system->systemSize(); ++i)
 	{
@@ -98,9 +103,9 @@ TEST_F(ParticleSystemTest, test_initializePrevVel)
 
 TEST_F(ParticleSystemTest, test_changedValueOfVel)
 {
-	float3 basicVel(3.f, 0, 0);
-	system->initializeVel(basicVel);
-	system->initializePrevVel();
+ 	system->initialize(*commonVel);	
+	// system->initializeVel(*commonVel);
+	// system->initializePrevVel();
 
     float3 newVel(10.f, 10.f, 10.f);
     system->getVel()[0] = newVel;
