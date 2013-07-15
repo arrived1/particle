@@ -35,7 +35,6 @@ public:
 		initializePrevVel();
 	}
 	
-
 	unsigned systemSize() const
 	{
 		return quantity;

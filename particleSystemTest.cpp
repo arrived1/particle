@@ -30,7 +30,6 @@ TEST_F(ParticleSystemTest, test_setSystemSize)
 
 TEST_F(ParticleSystemTest, test_initializePos)
 {
-    // system->initializePos();
     system->initialize(*commonVel);
 
     ASSERT_EQ(2 * 6 * 6, system->getPos().size());
@@ -47,8 +46,6 @@ TEST_F(ParticleSystemTest, test_initializePos)
 TEST_F(ParticleSystemTest, test_initializePrevPos)
 {
 	system->initialize(*commonVel);
-    // system->initializePos();
-    // system->initializePrevPos();
 
     ASSERT_EQ(system->getPos().size(), system->getPrevPos().size());
 
@@ -63,8 +60,6 @@ TEST_F(ParticleSystemTest, test_initializePrevPos)
 TEST_F(ParticleSystemTest, test_changedValueOfPos)
 {
 	system->initialize(*commonVel);
-    // system->initializePos();
-    // system->initializePrevPos();
 
     float3 newPos(10.f, 10.f, 10.f);
     system->getPos()[0] = newPos;
@@ -77,7 +72,6 @@ TEST_F(ParticleSystemTest, test_changedValueOfPos)
 TEST_F(ParticleSystemTest, test_initializeVel)
 {
 	system->initialize(*commonVel);
-	// system->initializeVel(*commonVel);
 
 	for(unsigned i = 0; i < system->systemSize(); ++i)
 	{
@@ -90,8 +84,6 @@ TEST_F(ParticleSystemTest, test_initializeVel)
 TEST_F(ParticleSystemTest, test_initializePrevVel)
 {
 	system->initialize(*commonVel);
-	// system->initializeVel(*commonVel);
-	// system->initializePrevVel();
 
 	for(unsigned i = 0; i < system->systemSize(); ++i)
 	{
@@ -104,8 +96,6 @@ TEST_F(ParticleSystemTest, test_initializePrevVel)
 TEST_F(ParticleSystemTest, test_changedValueOfVel)
 {
  	system->initialize(*commonVel);	
-	// system->initializeVel(*commonVel);
-	// system->initializePrevVel();
 
     float3 newVel(10.f, 10.f, 10.f);
     system->getVel()[0] = newVel;
