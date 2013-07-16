@@ -118,7 +118,7 @@ TEST_F(ParticleSystemTest, test_calculateForce)
 	}
 }
 
-TEST_F(ParticleSystemTest, test_verletMoveOnXdirection)
+TEST_F(ParticleSystemTest, test_verletMoveOnXDirection)
 {
 	const float dt = 0.5f;
 	system->initialize(*commonVel);	
@@ -138,6 +138,55 @@ TEST_F(ParticleSystemTest, test_verletMoveOnXdirection)
 		ASSERT_EQ(posTmp[i].z, system->getPos()[i].z);
 	}
 }
+
+TEST_F(ParticleSystemTest, test_verletMoveOnOtherDirection)
+{
+	const float dt = 0.5f;
+	float3 vel(3.f, 4.f, 6.f);
+	system->initialize(vel);	
+
+	vector posTmp = system->getPos();
+	vector velTmp = system->getVel();
+	system->verlet(dt);
+
+	for(unsigned i = 0; i < system->systemSize(); ++i)
+	{
+		ASSERT_NE(velTmp[i].x, system->getVel()[i].x);
+		ASSERT_NE(velTmp[i].y, system->getVel()[i].y);
+		ASSERT_NE(velTmp[i].z, system->getVel()[i].z);
+
+		ASSERT_NE(posTmp[i].x, system->getPos()[i].x);
+		ASSERT_NE(posTmp[i].y, system->getPos()[i].y);
+		ASSERT_NE(posTmp[i].z, system->getPos()[i].z);
+	}
+}
+
+TEST_F(ParticleSystemTest, test_copyPosAndVel)
+{
+	const float dt = 0.5f;
+	float3 vel(3.f, 4.f, 6.f);
+	system->initialize(vel);	
+	system->verlet(dt);
+
+	for(unsigned i = 0; i < system->systemSize(); ++i)
+	{
+		ASSERT_NE(system->getPos()[i].x, system->getPrevPos()[i].x);
+		ASSERT_NE(system->getPos()[i].y, system->getPrevPos()[i].y);
+		ASSERT_NE(system->getPos()[i].z, system->getPrevPos()[i].z);
+	}
+
+	system->copyPosAndVel();
+
+	for(unsigned i = 0; i < system->systemSize(); ++i)
+	{
+		ASSERT_EQ(system->getPos()[i].x, system->getPrevPos()[i].x);
+		ASSERT_EQ(system->getPos()[i].y, system->getPrevPos()[i].y);
+		ASSERT_EQ(system->getPos()[i].z, system->getPrevPos()[i].z);
+	}
+}
+
+
+
 
 
 

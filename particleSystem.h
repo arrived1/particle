@@ -60,7 +60,11 @@ public:
 		}
 	}
 
-
+	void copyPosAndVel()
+	{
+		prevPos = pos;
+		prevVel = vel;
+	}
 
 
 	unsigned systemSize() const
