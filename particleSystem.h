@@ -45,7 +45,20 @@ public:
 		return float3(vx, vy, vz);
 	}
 
+	void verlet(float dt)
+	{
+		for(unsigned i = 0; i < quantity; ++i)
+		{
+			float3 force = calculateForce(dt, i);
+			vel[i].x += force.x * dt;
+			vel[i].y += force.y * dt;
+			vel[i].z += force.z * dt;
 
+			pos[i].x += vel[i].x * dt;
+			pos[i].y += vel[i].y * dt;
+			pos[i].z += vel[i].z * dt;
+		}
+	}
 
 
 

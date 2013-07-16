@@ -109,12 +109,33 @@ TEST_F(ParticleSystemTest, test_calculateForce)
 {
 	system->initialize(*commonVel);	
 
-	float dt = 0.5f;
+	const float dt = 0.5f;
 	for(unsigned i = 0; i < system->systemSize(); ++i)
 	{
 		ASSERT_EQ(commonVel->x / dt, system->calculateForce(dt, i).x);
 		ASSERT_EQ(commonVel->y / dt, system->calculateForce(dt, i).y);
 		ASSERT_EQ(commonVel->z / dt, system->calculateForce(dt, i).z);
+	}
+}
+
+TEST_F(ParticleSystemTest, test_verletMoveOnXdirection)
+{
+	const float dt = 0.5f;
+	system->initialize(*commonVel);	
+
+	vector posTmp = system->getPos();
+	vector velTmp = system->getVel();
+	system->verlet(dt);
+
+	for(unsigned i = 0; i < system->systemSize(); ++i)
+	{
+		ASSERT_NE(velTmp[i].x, system->getVel()[i].x);
+		ASSERT_EQ(velTmp[i].y, system->getVel()[i].y);
+		ASSERT_EQ(velTmp[i].z, system->getVel()[i].z);
+
+		ASSERT_NE(posTmp[i].x, system->getPos()[i].x);
+		ASSERT_EQ(posTmp[i].y, system->getPos()[i].y);
+		ASSERT_EQ(posTmp[i].z, system->getPos()[i].z);
 	}
 }
 
