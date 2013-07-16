@@ -185,7 +185,10 @@ TEST_F(ParticleSystemTest, test_copyPosAndVel)
 	}
 }
 
-
+TEST_F(ParticleSystemTest, test_checkParticleCol)
+{
+	ParticleSystem system(1, 2, 2);
+}
 
 
 

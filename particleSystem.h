@@ -25,7 +25,8 @@ public:
 		ySize(ySize_),
 		zSize(zSize_),
 		quantity(xSize * ySize * zSize),
-		mass(1.f)
+		mass(1.f),
+		radius(1.f)
 	{}
 
 	void initialize(float3 commonVel)
@@ -60,12 +61,15 @@ public:
 		}
 	}
 
+
+
+
+
 	void copyPosAndVel()
 	{
 		prevPos = pos;
 		prevVel = vel;
 	}
-
 
 	unsigned systemSize() const
 	{
@@ -91,7 +95,6 @@ public:
 	{
 		return prevVel;
 	}
-
 
 private:
 	void initializePos()
@@ -126,6 +129,11 @@ private:
 		prevVel = vel;
 	}
 
+	bool checkParticleCol(unsigned i)
+	{
+		return true;
+	}
+
 
 	const unsigned xSize;
 	const unsigned ySize;
@@ -133,6 +141,7 @@ private:
 	const unsigned quantity;
 
 	const float mass;
+	const float radius;
 
 	vector pos;
 	vector prevPos;
