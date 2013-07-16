@@ -24,7 +24,8 @@ public:
 		: xSize(xSize_),
 		ySize(ySize_),
 		zSize(zSize_),
-		quantity(xSize * ySize * zSize)
+		quantity(xSize * ySize * zSize),
+		mass(1.f)
 	{}
 
 	void initialize(float3 commonVel)
@@ -35,6 +36,20 @@ public:
 		initializePrevVel();
 	}
 	
+	float3 calculateForce(float dt, unsigned idx)
+	{
+		float vx = mass * vel[idx].x / dt;
+		float vy = mass * vel[idx].y / dt;
+		float vz = mass * vel[idx].z / dt;
+
+		return float3(vx, vy, vz);
+	}
+
+
+
+
+
+
 	unsigned systemSize() const
 	{
 		return quantity;
@@ -68,7 +83,7 @@ private:
 		float yRange = ySize;
 		float zRange = zSize;
 
-		std::cout << "Initializing particle pos" << std::endl;
+		// std::cout << "Initializing particle pos" << std::endl;
 
 		for(float i = -xRange; i < -xRange + xRange/2; i += 0.5f)
 			for(float j = -yRange/2; j < yRange/2; j += 1.f) 
@@ -99,6 +114,8 @@ private:
 	const unsigned ySize;
 	const unsigned zSize;
 	const unsigned quantity;
+
+	const float mass;
 
 	vector pos;
 	vector prevPos;

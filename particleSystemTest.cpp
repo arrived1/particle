@@ -105,6 +105,19 @@ TEST_F(ParticleSystemTest, test_changedValueOfVel)
     ASSERT_NE(system->getVel()[0].z, system->getPrevVel()[0].z);
 }
 
+TEST_F(ParticleSystemTest, test_calculateForce)
+{
+	system->initialize(*commonVel);	
+
+	float dt = 0.5f;
+	for(unsigned i = 0; i < system->systemSize(); ++i)
+	{
+		ASSERT_EQ(commonVel->x / dt, system->calculateForce(dt, i).x);
+		ASSERT_EQ(commonVel->y / dt, system->calculateForce(dt, i).y);
+		ASSERT_EQ(commonVel->z / dt, system->calculateForce(dt, i).z);
+	}
+}
+
 
 
 
