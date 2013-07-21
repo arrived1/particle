@@ -18,7 +18,8 @@ typedef std::vector<float3> vector;
 class ParticleSystem
 {
 public:
-	ParticleSystem(const unsigned xSize_ = 20,
+	ParticleSystem(const float radius_ = 1.f, 
+				   const unsigned xSize_ = 20,
 				   const unsigned ySize_ = 60,
 				   const unsigned zSize_ = 60)
 		: xSize(xSize_),
@@ -26,7 +27,7 @@ public:
 		zSize(zSize_),
 		quantity(xSize * ySize * zSize),
 		mass(1.f),
-		radius(1.f)
+		radius(radius_)
 	{}
 
 	void initialize(float3 commonVel)
