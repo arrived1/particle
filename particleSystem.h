@@ -54,7 +54,7 @@ public:
 		radius(radius_)
 	{}
 
-	void initialize(float3 commonVel = float3(3.f, 0.f, 0.f))
+	void initialize(const float3 commonVel = float3(3.f, 0.f, 0.f))
 	{
 		initializePos();
 		initializePrevPos();
@@ -62,7 +62,7 @@ public:
 		initializePrevVel();
 	}
 	
-	float3 calculateForce(float dt, unsigned idx)
+	float3 calculateForce(const float dt, const unsigned idx)
 	{
 		float vx = mass * vel[idx].x / dt;
 		float vy = mass * vel[idx].y / dt;
@@ -71,7 +71,7 @@ public:
 		return float3(vx, vy, vz);
 	}
 
-	void verlet(float dt)
+	void verlet(const float dt)
 	{
 		for(unsigned i = 0; i < quantity; ++i)
 		{
@@ -86,11 +86,11 @@ public:
 		}
 	}
 
-	vector4 checkCollision(unsigned idx)
+	vector4 checkCollision(const unsigned idx)
 	{
 		vector4 collidingParticles;
 		float dist;
-		float rays = 2 * radius;
+		float rays = 2.f * radius;
 
 		for(unsigned i = 0; i < quantity; ++i)
 		{
@@ -99,6 +99,8 @@ public:
 
 			dist = calculateDistance(idx, i);
 
+			std::cout << dist << std::endl;
+
 			if(dist <= rays)
 				collidingParticles.push_back(float4(prevPos[i], dist));
 
@@ -106,10 +108,22 @@ public:
 		return collidingParticles;
 	}
 
-	void reactToCollision(unsigned idx)
-	{
+	// void reactToCollision(unsigned idx, const vector4& collidingParticles)
+	// {
+	// 	float dist = collidingParticles[0].z;
+	// 	float multiplier = (2.f * radius - dist) / 2.f;
+	// 	float3 vecToChange = calculateDistToMove(idx, multiplier);
 
-	}
+	// 	std::cout << "currentPos: " << pos[idx] << std::endl;
+	// 	pos[idx].x = pos[idx].x - vecToChange.x;
+	// 	pos[idx].y = pos[idx].y - vecToChange.y;
+	// 	pos[idx].z = pos[idx].z - vecToChange.z;
+	// 	std::cout << "newPos: " << pos[idx] << std::endl << std::endl;
+	// }
+
+
+
+
 
 
 
@@ -145,7 +159,7 @@ public:
 	}
 
 private:
-	float calculateDistance(unsigned currentParticle, unsigned idx)
+	float calculateDistance(const unsigned currentParticle, const unsigned idx)
 	{
 		float x = prevPos[currentParticle].x - prevPos[idx].x;
 		float y = prevPos[currentParticle].y - prevPos[idx].y;
@@ -154,15 +168,49 @@ private:
 		return pow(x*x + y*y + z*z, 0.5);
 	}
 
+	float3 calculateDistToMove(const unsigned idx, const float multiplier)
+	{
+		float oppsiteDirec = -1.f;
+		float scalledMultiplier = (multiplier + 0.0005f) * oppsiteDirec;
+		float3 versor = findVersor(prevVel[idx]);
+		float3 dist = float3(versor.x * scalledMultiplier, 
+					  		 versor.y * scalledMultiplier, 
+					  		 versor.z * scalledMultiplier);
+		std::cout << "calculateDistToMove: " << dist << std::endl;
+		return dist;
+	}
+
+	float3 findVersor(const float3 vec)
+	{
+		float3 versor = float3(0.f, 0.f, 0.f);
+
+		if(vec.x > 0.f)
+			versor.x = 1.f;
+		if(vec.x < 0.f)
+			versor.x = -1.f;
+
+		if(vec.y > 0.f)
+			versor.y = 1.f;
+		if(vec.y < 0.f)
+			versor.y = -1.f;
+
+		if(vec.z > 0.f)
+			versor.z = 1.f;
+		if(vec.z < 0.f)
+			versor.z = -1.f;
+
+		return versor;
+	}
+
 	void initializePos()
 	{
 		float xRange = xSize;
 		float yRange = ySize;
 		float zRange = zSize;
 
-		for(float i = -xRange; i < -xRange + xRange/2; i += 0.5f)
-			for(float j = -yRange/2; j < yRange/2; j += 1.f) 
-				for(float k = -zRange/2; k < zRange/2; k += 1.f)
+		for(float i = -xRange; i < -xRange + xRange/2.f; i += 0.5f)
+			for(float j = -yRange/2; j < yRange/2.f; j += 1.f) 
+				for(float k = -zRange/2; k < zRange/2.f; k += 1.f)
 				{
 					pos.push_back(float3(i, j, k));
 				}
@@ -173,7 +221,7 @@ private:
 		prevPos = pos;
 	}
 
-	void initializeVel(float3 commonVel)
+	void initializeVel(const float3 commonVel)
 	{
 		for(unsigned i = 0; i < quantity; ++i)
 			vel.push_back(commonVel);
@@ -182,11 +230,6 @@ private:
 	void initializePrevVel()
 	{
 		prevVel = vel;
-	}
-
-	bool checkParticleCol(unsigned i)
-	{
-		return true;
 	}
 
 

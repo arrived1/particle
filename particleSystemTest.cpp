@@ -199,9 +199,25 @@ TEST_F(ParticleSystemTest, test_copyPosAndVel)
 	}
 }
 
-TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_singleCollision)
+TEST_F(ParticleSystemTest, test_checkParticleCol_singleCollision_borderCollision)
 {
-	float radius = 1.f;
+	ParticleSystem system(radius, 2, 1, 1);
+	system.initialize();
+	
+	system.getPos()[0] = float3(1.f, 0.f, 0.f);
+	system.getPos()[1] = float3(3.f, 0.f, 0.f);
+	
+	system.copyPosAndVel();
+
+	vector4 collidingParticles = system.checkCollision(0);
+	ASSERT_TRUE(collidingParticles.size());
+
+	collidingParticles = system.checkCollision(1);
+	ASSERT_TRUE(collidingParticles.size());
+}
+
+TEST_F(ParticleSystemTest, test_checkParticleCol_singleCollision_deepCollision)
+{
 	ParticleSystem system(radius, 1, 2, 2);
 	system.initialize();
 
@@ -229,7 +245,6 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_sing
 
 TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_multipleCollision)
 {
-	float radius = 1.f;
 	ParticleSystem system(radius, 1, 2, 3);
 	system.initialize();
 
@@ -242,28 +257,57 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_mult
 
 	system.copyPosAndVel();
 
-	vector4 collidate = system.checkCollision(0);
-	ASSERT_EQ(3u, collidate.size());
-	checkDistanceBetweenParticles(collidate);
+	vector4 collidingParticles = system.checkCollision(0);
+	ASSERT_EQ(3u, collidingParticles.size());
+	checkDistanceBetweenParticles(collidingParticles);
 	
-	collidate = system.checkCollision(1);
-	ASSERT_EQ(3u, collidate.size());
-	checkDistanceBetweenParticles(collidate);
+	collidingParticles = system.checkCollision(1);
+	ASSERT_EQ(3u, collidingParticles.size());
+	checkDistanceBetweenParticles(collidingParticles);
 
-	collidate = system.checkCollision(2);
-	ASSERT_EQ(0u, collidate.size());
+	collidingParticles = system.checkCollision(2);
+	ASSERT_EQ(0u, collidingParticles.size());
 
-	collidate = system.checkCollision(3);
-	ASSERT_EQ(3u, collidate.size());
-	checkDistanceBetweenParticles(collidate);
+	collidingParticles = system.checkCollision(3);
+	ASSERT_EQ(3u, collidingParticles.size());
+	checkDistanceBetweenParticles(collidingParticles);
 
-	collidate = system.checkCollision(4);
-	ASSERT_EQ(0u, collidate.size());
+	collidingParticles = system.checkCollision(4);
+	ASSERT_EQ(0u, collidingParticles.size());
 
-	collidate = system.checkCollision(5);
-	ASSERT_EQ(3u, collidate.size());
-	checkDistanceBetweenParticles(collidate);
+	collidingParticles = system.checkCollision(5);
+	ASSERT_EQ(3u, collidingParticles.size());
+	checkDistanceBetweenParticles(collidingParticles);
 }
+
+// TEST_F(ParticleSystemTest, test_reactToCollision_singleCollsion_oppsiteVelVectors)
+// {
+// 	unsigned idx = 0;
+// 	ParticleSystem system(radius, 2, 1, 1);
+	
+// 	float3 vel(2.f, 0.f, 0.f);
+// 	system.initialize(vel);
+// 	system.getVel()[idx + 1] = float3(-2.f, 0.f, 0.f);
+	
+// 	system.getPos()[idx] = float3(1.f, 0.f, 0.f);
+// 	system.getPos()[idx + 1] = float3(4.f, 0.f, 0.f);
+	
+// 	system.copyPosAndVel();
+
+
+// 	vector4 collidingParticles = system.checkCollision(idx);
+	
+// 	ASSERT_TRUE(collidingParticles.size());
+
+// 	system.copyPosAndVel();
+// 	system.reactToCollision(idx, collidingParticles);
+// 	system.reactToCollision(idx + 1, collidingParticles);
+	
+// 	ASSERT_FALSE(system.checkCollision(idx).size());
+// 	ASSERT_FALSE(system.checkCollision(idx + 1).size());
+// }
+
+
 
 
 
