@@ -244,7 +244,7 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_singleCollision_deepCollision)
 	ASSERT_EQ(0u, collidate.size());
 }
 
-TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_multipleCollision)
+TEST_F(ParticleSystemTest, test_checkParticleCol_multipleCollision)
 {
 	ParticleSystem system(radius, 1, 2, 3);
 	system.initialize();
@@ -281,32 +281,35 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_mult
 	checkDistanceBetweenParticles(collidingParticles);
 }
 
-// TEST_F(ParticleSystemTest, test_reactToCollision_singleCollsion_oppsiteVelVectors)
-// {
-// 	unsigned idx = 0;
-// 	ParticleSystem system(radius, 2, 1, 1);
+TEST_F(ParticleSystemTest, test_reactToCollision_singleCollsion_borderCollision_oppsiteVelVectors)
+{
+	unsigned idx = 0;
+	ParticleSystem system(radius, 2, 1, 1);
 	
-// 	float3 vel(2.f, 0.f, 0.f);
-// 	system.initialize(vel);
-// 	system.getVel()[idx + 1] = float3(-2.f, 0.f, 0.f);
+	float3 vel(2.f, 0.f, 0.f);
+	system.initialize(vel);
+	system.getVel()[1] = float3(-2.f, 0.f, 0.f);
 	
-// 	system.getPos()[idx] = float3(1.f, 0.f, 0.f);
-// 	system.getPos()[idx + 1] = float3(3.f, 0.f, 0.f);
+	system.getPos()[0] = float3(1.f, 0.f, 0.f);
+	system.getPos()[1] = float3(3.f, 0.f, 0.f);
 	
-// 	system.copyPosAndVel();
+	system.copyPosAndVel();
 
 
-// 	vector4 collidingParticles = system.checkCollision(idx);
+	vector4 collidingParticles0 = system.checkCollision(0);
+	vector4 collidingParticles1 = system.checkCollision(1);
 	
-// 	ASSERT_TRUE(collidingParticles.size());
+	ASSERT_TRUE(collidingParticles0.size());
+	ASSERT_TRUE(collidingParticles1.size());
 
-// 	system.copyPosAndVel();
-// 	system.reactToCollision(idx, collidingParticles);
-// 	system.reactToCollision(idx + 1, collidingParticles);
+	system.copyPosAndVel();
+	system.reactToCollision(0, collidingParticles0);
+	system.reactToCollision(1, collidingParticles1);
 	
-// 	ASSERT_FALSE(system.checkCollision(idx).size());
-// 	ASSERT_FALSE(system.checkCollision(idx + 1).size());
-// }
+	system.copyPosAndVel();
+	ASSERT_FALSE(system.checkCollision(0).size());
+	ASSERT_FALSE(system.checkCollision(1).size());
+}
 
 
 

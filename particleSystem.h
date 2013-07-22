@@ -108,21 +108,26 @@ public:
 		return collidingParticles;
 	}
 
-	// void reactToCollision(unsigned idx, const vector4& collidingParticles)
-	// {
-	// 	float dist = collidingParticles[0].z;
-	// 	float multiplier = (2.f * radius - dist) / 2.f;
+	void reactToCollision(unsigned idx, const vector4& collidingParticles)
+	{
 
-	// 	std::cout << "tooFar: " << multiplier << std::endl;
+		float dist = collidingParticles[0].z;
+		float multiplier = 0.f;
+		if(dist == 0.f)
+			multiplier = 0.f;
 
-	// 	float3 vecToChange = calculateDistToMove(idx, multiplier);
+		// float multiplier = (2.f * radius - dist) / 2.f;
 
-	// 	std::cout << "currentPos: " << pos[idx] << std::endl;
-	// 	pos[idx].x = pos[idx].x + vecToChange.x;
-	// 	pos[idx].y = pos[idx].y + vecToChange.y;
-	// 	pos[idx].z = pos[idx].z + vecToChange.z;
-	// 	std::cout << "newPos: " << pos[idx] << std::endl << std::endl;
-	// }
+		std::cout << "tooFar: " << multiplier << std::endl;
+
+		float3 vecToChange = calculateDistToMove(idx, multiplier);
+
+		std::cout << "currentPos: " << pos[idx] << std::endl;
+		pos[idx].x = pos[idx].x + vecToChange.x;
+		pos[idx].y = pos[idx].y + vecToChange.y;
+		pos[idx].z = pos[idx].z + vecToChange.z;
+		std::cout << "newPos: " << pos[idx] << std::endl << std::endl;
+	}
 
 
 
