@@ -106,6 +106,10 @@ public:
 		return collidingParticles;
 	}
 
+	void reactToCollision(unsigned idx)
+	{
+
+	}
 
 
 

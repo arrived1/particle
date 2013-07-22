@@ -16,11 +16,23 @@ public:
 		system.reset(new ParticleSystem(radius, x, y, z));
 	}
 
+	void checkDistanceBetweenParticles(vector4 vec);
+
 	unsigned x, y, z;
 	float radius;
 	boost::shared_ptr<float3> commonVel;
 	boost::shared_ptr<ParticleSystem> system;
 };
+
+void ParticleSystemTest::checkDistanceBetweenParticles(vector4 vec)
+{
+	for(unsigned i = 0; i < vec.size(); ++i)
+	{
+		ASSERT_TRUE(vec[0].z < 2*radius);
+	}
+}
+
+
 
 TEST_F(ParticleSystemTest, test_setSystemSize)
 {
@@ -187,7 +199,7 @@ TEST_F(ParticleSystemTest, test_copyPosAndVel)
 	}
 }
 
-TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles)
+TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_singleCollision)
 {
 	float radius = 1.f;
 	ParticleSystem system(radius, 1, 2, 2);
@@ -215,7 +227,43 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles)
 	ASSERT_EQ(0u, collidate.size());
 }
 
+TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_multipleCollision)
+{
+	float radius = 1.f;
+	ParticleSystem system(radius, 1, 2, 3);
+	system.initialize();
 
+	system.getPos()[0] = float3(10.f, 0.f, 0.f);
+	system.getPos()[1] = float3(10.f, 0.2f, 0.f);
+	system.getPos()[2] = float3(4.5f, 0.f, 0.f);
+	system.getPos()[3] = float3(10.5f, 0.f, 0.f);
+	system.getPos()[4] = float3(-3.5f, 0.f, 0.f);
+	system.getPos()[5] = float3(10.5f, 0.f, 0.3f);
+
+	system.copyPosAndVel();
+
+	vector4 collidate = system.checkCollision(0);
+	ASSERT_EQ(3u, collidate.size());
+	checkDistanceBetweenParticles(collidate);
+	
+	collidate = system.checkCollision(1);
+	ASSERT_EQ(3u, collidate.size());
+	checkDistanceBetweenParticles(collidate);
+
+	collidate = system.checkCollision(2);
+	ASSERT_EQ(0u, collidate.size());
+
+	collidate = system.checkCollision(3);
+	ASSERT_EQ(3u, collidate.size());
+	checkDistanceBetweenParticles(collidate);
+
+	collidate = system.checkCollision(4);
+	ASSERT_EQ(0u, collidate.size());
+
+	collidate = system.checkCollision(5);
+	ASSERT_EQ(3u, collidate.size());
+	checkDistanceBetweenParticles(collidate);
+}
 
 
 
