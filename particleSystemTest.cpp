@@ -214,6 +214,7 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_singleCollision_borderCollision
 
 	collidingParticles = system.checkCollision(1);
 	ASSERT_TRUE(collidingParticles.size());
+	ASSERT_EQ(0.f, collidingParticles[0].w);
 }
 
 TEST_F(ParticleSystemTest, test_checkParticleCol_singleCollision_deepCollision)
@@ -290,7 +291,7 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles_mult
 // 	system.getVel()[idx + 1] = float3(-2.f, 0.f, 0.f);
 	
 // 	system.getPos()[idx] = float3(1.f, 0.f, 0.f);
-// 	system.getPos()[idx + 1] = float3(4.f, 0.f, 0.f);
+// 	system.getPos()[idx + 1] = float3(3.f, 0.f, 0.f);
 	
 // 	system.copyPosAndVel();
 

@@ -99,10 +99,10 @@ public:
 
 			dist = calculateDistance(idx, i);
 
-			std::cout << dist << std::endl;
-
-			if(dist <= rays)
+			if(dist < rays)
 				collidingParticles.push_back(float4(prevPos[i], dist));
+			if(dist == rays)
+				collidingParticles.push_back(float4(prevPos[i], 0.f));
 
 		}
 		return collidingParticles;
@@ -112,12 +112,15 @@ public:
 	// {
 	// 	float dist = collidingParticles[0].z;
 	// 	float multiplier = (2.f * radius - dist) / 2.f;
+
+	// 	std::cout << "tooFar: " << multiplier << std::endl;
+
 	// 	float3 vecToChange = calculateDistToMove(idx, multiplier);
 
 	// 	std::cout << "currentPos: " << pos[idx] << std::endl;
-	// 	pos[idx].x = pos[idx].x - vecToChange.x;
-	// 	pos[idx].y = pos[idx].y - vecToChange.y;
-	// 	pos[idx].z = pos[idx].z - vecToChange.z;
+	// 	pos[idx].x = pos[idx].x + vecToChange.x;
+	// 	pos[idx].y = pos[idx].y + vecToChange.y;
+	// 	pos[idx].z = pos[idx].z + vecToChange.z;
 	// 	std::cout << "newPos: " << pos[idx] << std::endl << std::endl;
 	// }
 
@@ -172,6 +175,9 @@ private:
 	{
 		float oppsiteDirec = -1.f;
 		float scalledMultiplier = (multiplier + 0.0005f) * oppsiteDirec;
+
+		std::cout << "scalledMultiplier: " << scalledMultiplier <<std::endl;
+
 		float3 versor = findVersor(prevVel[idx]);
 		float3 dist = float3(versor.x * scalledMultiplier, 
 					  		 versor.y * scalledMultiplier, 
