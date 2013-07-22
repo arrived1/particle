@@ -125,8 +125,8 @@ TEST_F(ParticleSystemTest, test_verletMoveOnXDirection)
 	const float dt = 0.5f;
 	system->initialize(*commonVel);	
 
-	vector posTmp = system->getPos();
-	vector velTmp = system->getVel();
+	vector3 posTmp = system->getPos();
+	vector3 velTmp = system->getVel();
 	system->verlet(dt);
 
 	for(unsigned i = 0; i < system->systemSize(); ++i)
@@ -147,8 +147,8 @@ TEST_F(ParticleSystemTest, test_verletMoveOnOtherDirection)
 	float3 vel(3.f, 4.f, 6.f);
 	system->initialize(vel);	
 
-	vector posTmp = system->getPos();
-	vector velTmp = system->getVel();
+	vector3 posTmp = system->getPos();
+	vector3 velTmp = system->getVel();
 	system->verlet(dt);
 
 	for(unsigned i = 0; i < system->systemSize(); ++i)
@@ -200,18 +200,27 @@ TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles)
 
 	system.copyPosAndVel();
 
-	ASSERT_EQ(1u, system.checkCollision(0).size());
-	ASSERT_EQ(1u, system.checkCollision(1).size());
+	vector4 collidate = system.checkCollision(0);
+	ASSERT_EQ(1u, collidate.size());
+	ASSERT_TRUE(collidate[0].z < 2*radius);
 	
-	ASSERT_EQ(0u, system.checkCollision(2).size());
-	ASSERT_EQ(0u, system.checkCollision(3).size());
+	collidate = system.checkCollision(1);
+	ASSERT_EQ(1u, collidate.size());
+	ASSERT_TRUE(collidate[0].z < 2*radius);
+
+	collidate = system.checkCollision(2);
+	ASSERT_EQ(0u, collidate.size());
+
+	collidate = system.checkCollision(3);
+	ASSERT_EQ(0u, collidate.size());
 }
 
 
 
 
 
-int main(int argc, char* argv[]) {                                                                                      
+int main(int argc, char* argv[]) 
+{                                                                                      
   testing::InitGoogleTest(&argc, argv);                                                                                 
   return RUN_ALL_TESTS();                                                                                               
 }

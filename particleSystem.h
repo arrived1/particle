@@ -14,13 +14,30 @@ struct float3
 	float z;
 };
 
+struct float4 : public float3
+{
+	float4(float x_ = 0, float y_ = 0, float z_ = 0, float w_ = 0)
+		: float3(x_, y_, z_), 
+		w(w_)
+	{}
+
+	float4(float3 f3_, float w_)
+		: float3(f3_.x, f3_.y, f3_.z),
+		w(w_)
+	{}
+
+	float w;
+};
+
+
 std::ostream & operator<<(std::ostream &out, const float3 &f)         
  {
    return out << "(" << f.x << ", " << f.y << ", " << f.z << ")";
  }
 
 
-typedef std::vector<float3> vector;
+typedef std::vector<float3> vector3;
+typedef std::vector<float4> vector4;
 
 class ParticleSystem
 {
@@ -69,9 +86,9 @@ public:
 		}
 	}
 
-	vector checkCollision(unsigned idx)
+	vector4 checkCollision(unsigned idx)
 	{
-		vector collidingParticles;
+		vector4 collidingParticles;
 		float dist;
 		float rays = 2 * radius;
 
@@ -83,10 +100,9 @@ public:
 			dist = calculateDistance(idx, i);
 
 			if(dist <= rays)
-				collidingParticles.push_back(prevPos[i]);
+				collidingParticles.push_back(float4(prevPos[i], dist));
 
 		}
-		std::cout << std::endl;
 		return collidingParticles;
 	}
 
@@ -104,22 +120,22 @@ public:
 		return quantity;
 	}
 
-	vector& getPos()
+	vector3& getPos()
 	{
 		return pos;
 	}
 
-	vector& getPrevPos()
+	vector3& getPrevPos()
 	{
 		return prevPos;
 	}
 
-	vector& getVel()
+	vector3& getVel()
 	{
 		return vel;
 	}
 
-	vector& getPrevVel()
+	vector3& getPrevVel()
 	{
 		return prevVel;
 	}
@@ -178,9 +194,9 @@ private:
 	const float mass;
 	const float radius;
 
-	vector pos;
-	vector prevPos;
-	vector vel;
-	vector prevVel;
+	vector3 pos;
+	vector3 prevPos;
+	vector3 vel;
+	vector3 prevVel;
 	//vector color;
 };
