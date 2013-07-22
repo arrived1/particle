@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ostream>
 #include <vector>
 #include <algorithm>
 
@@ -12,6 +13,12 @@ struct float3
 	float y;
 	float z;
 };
+
+std::ostream & operator<<(std::ostream &out, const float3 &f)         
+ {
+   return out << "(" << f.x << ", " << f.y << ", " << f.z << ")";
+ }
+
 
 typedef std::vector<float3> vector;
 
@@ -30,7 +37,7 @@ public:
 		radius(radius_)
 	{}
 
-	void initialize(float3 commonVel)
+	void initialize(float3 commonVel = float3(3.f, 0.f, 0.f))
 	{
 		initializePos();
 		initializePrevPos();
@@ -62,6 +69,26 @@ public:
 		}
 	}
 
+	vector checkCollision(unsigned idx)
+	{
+		vector collidingParticles;
+		float dist;
+		float rays = 2 * radius;
+
+		for(unsigned i = 0; i < quantity; ++i)
+		{
+			if(i == idx)
+				continue;
+
+			dist = calculateDistance(idx, i);
+
+			if(dist <= rays)
+				collidingParticles.push_back(prevPos[i]);
+
+		}
+		std::cout << std::endl;
+		return collidingParticles;
+	}
 
 
 
@@ -98,13 +125,20 @@ public:
 	}
 
 private:
+	float calculateDistance(unsigned currentParticle, unsigned idx)
+	{
+		float x = prevPos[currentParticle].x - prevPos[idx].x;
+		float y = prevPos[currentParticle].y - prevPos[idx].y;
+		float z = prevPos[currentParticle].z - prevPos[idx].z;
+
+		return pow(x*x + y*y + z*z, 0.5);
+	}
+
 	void initializePos()
 	{
 		float xRange = xSize;
 		float yRange = ySize;
 		float zRange = zSize;
-
-		// std::cout << "Initializing particle pos" << std::endl;
 
 		for(float i = -xRange; i < -xRange + xRange/2; i += 0.5f)
 			for(float j = -yRange/2; j < yRange/2; j += 1.f) 

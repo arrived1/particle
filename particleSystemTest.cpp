@@ -11,11 +11,13 @@ public:
 		x = 2;
 		y = 6;
 		z = 6;
+		radius = 1.f;
 		commonVel.reset(new float3(3.f, 0, 0));
-		system.reset(new ParticleSystem(x, y, z));
+		system.reset(new ParticleSystem(radius, x, y, z));
 	}
 
 	unsigned x, y, z;
+	float radius;
 	boost::shared_ptr<float3> commonVel;
 	boost::shared_ptr<ParticleSystem> system;
 };
@@ -23,7 +25,7 @@ public:
 TEST_F(ParticleSystemTest, test_setSystemSize)
 {
     const unsigned size = 5;
-    ParticleSystem system(size, size, size);
+    ParticleSystem system(radius, size, size, size);
 
     ASSERT_EQ(size * size * size, system.systemSize());
 }
@@ -185,9 +187,24 @@ TEST_F(ParticleSystemTest, test_copyPosAndVel)
 	}
 }
 
-TEST_F(ParticleSystemTest, test_checkParticleCol)
+TEST_F(ParticleSystemTest, test_checkParticleCol_amountOfCollidingParticles)
 {
-	ParticleSystem system(1, 2, 2);
+	float radius = 1.f;
+	ParticleSystem system(radius, 1, 2, 2);
+	system.initialize();
+
+	system.getPos()[0] = float3(10.f, 0.f, 0.f);
+	system.getPos()[1] = float3(10.5f, 0.f, 0.f);
+	system.getPos()[2] = float3(1.5f, 0.f, 0.f);
+	system.getPos()[3] = float3(4.5f, 0.f, 0.f);
+
+	system.copyPosAndVel();
+
+	ASSERT_EQ(1u, system.checkCollision(0).size());
+	ASSERT_EQ(1u, system.checkCollision(1).size());
+	
+	ASSERT_EQ(0u, system.checkCollision(2).size());
+	ASSERT_EQ(0u, system.checkCollision(3).size());
 }
 
 
