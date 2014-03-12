@@ -1,5 +1,5 @@
-GTESTPATH=/home/przybyl/Programming/gtest-1.6.0
-PROJECTPATH=/home/przybyl/Programming/particle
+GTESTPATH=/home/arrived/Downloads/gtest-1.7.0
+PROJECTPATH=/home/arrived/Projects/particle
 
 CC=clang++
 CFLAGS=-std=c++11
