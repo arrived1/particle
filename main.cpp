@@ -4,5 +4,5 @@
 
 int main()
 {
-
+	ParticleSystem<float2> system;
 }
